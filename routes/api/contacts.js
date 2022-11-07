@@ -18,7 +18,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const {name, phone, email} = req.body;
-  res.json(await addContact({name, phone, email}))
+  res.json(await addContact(name, phone, email))
 })
 
 router.delete('/:contactId', async (req, res, next) => {

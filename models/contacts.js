@@ -15,9 +15,14 @@ const removeContact = async (contactId) => {
   return contactId
 }
 
-const addContact = async ({name, phone, email}) => {
+const addContact = async (name, phone, email) => {
+  console.log(name, phone, email)
   const id = +contacts[contacts.length - 1].id + 1 + "";
-  const contacts = [...contacts, {id, name, email, phone }]
+  // const id = Date.now();
+  console.log(id);
+  // contacts = [...contacts, {id, name, email, phone }]
+  contacts.push({id, name, email, phone })
+  return id
 }
 
 const updateContact = async (contactId, body) => {}
