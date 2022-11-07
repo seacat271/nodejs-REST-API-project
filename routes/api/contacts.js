@@ -21,7 +21,7 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json(await removeContact(req.params.id))
+  res.json(await removeContact(req.params.contactId))
 })
 
 router.put('/:contactId', async (req, res, next) => {

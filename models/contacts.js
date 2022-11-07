@@ -1,5 +1,5 @@
 const fs =  require("fs").promises;
-const contacts = require('./contacts.json')
+let contacts = require('./contacts.json')
 
 const listContacts = async () => {
     return contacts
@@ -11,17 +11,15 @@ const getContactById = async (contactId) => {
 }
 
 const removeContact = async (contactId) => {
-  const contacts = contacts.filter(item => item.id !== (contactId + ""));
+  contacts = [...contacts.filter(item => item.id !== contactId)];
   return contactId
 }
 
 const addContact = async (body) => {
  const {name, phone, email} = body;
   const id = +contacts[contacts.length - 1].id + 1 + "";
-  // const id = Date.now();
-  console.log(id);
-  // contacts = [...contacts, {id, name, email, phone }]
-  contacts.push({id, name, email, phone })
+  contacts = [...contacts, {id, name, email, phone }]
+  // contacts.push({id, name, email, phone })
   return id
 }
 
