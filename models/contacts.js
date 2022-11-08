@@ -1,43 +1,72 @@
 const fs =  require("fs").promises;
-let contacts = require('./contacts.json')
 
-const listContacts = async () => {
-    return contacts
+const path = require("path");
+const contactsPath = path.join(__dirname, "./contacts.json");
+
+const dataGet = async path => {
+  return JSON.parse(await fs.readFile(path, "utf-8"))
+};
+const dataChange = async (path, newData) => {
+  return await fs.writeFile(path, JSON.stringify(newData), "utf-8")
 }
 
-const getContactById = async (contactId) => {
+const listContacts = async () => {
+  const contacts = await dataGet(contactsPath);
+  return contacts
+}
+
+const getById = async (contactId) => {
+  const contacts = await dataGet(contactsPath);
+
   const [contact] = contacts.filter(item => item.id === contactId)
   return contact
 }
 
-const removeContact = async (contactId) => {
-  contacts = [...contacts.filter(item => item.id !== contactId)];
-  return contactId
-}
-
 const addContact = async (body) => {
  const {name, phone, email} = body;
+ const contacts = await dataGet(contactsPath);
   const id = +contacts[contacts.length - 1].id + 1 + "";
-  contacts = [...contacts, {id, name, email, phone }]
-  // contacts.push({id, name, email, phone })
-  return id
+  const newData = [...contacts, {id, name, email, phone }]
+  dataChange(contactsPath, newData)
+  return {id, name, email, phone }
+}
+
+const removeContact = async (contactId) => {
+  const contacts = await dataGet(contactsPath);
+  for (let contact of contacts) {
+    if (contact.id === contactId) {
+      const newData = [...contacts.filter(item => item.id !== contactId)];
+      dataChange(contactsPath, newData)
+      return {"message": "contact deleted"}
+    } 
+  }
+  return
 }
 
 const updateContact = async (contactId, body) => {
   const {name, phone, email} = body;
-  contacts.forEach(contact => {
-    if(contact.id === contactId) {
-      contact.name = name;
-      contact.phone = phone;
-      contact.email = email;
-    }
-  })
+  const contacts = await dataGet(contactsPath);
+
+  
+//   contacts.forEach(contact => {
+//     if(contact.id === contactId) {
+//       // contact.name = name;
+//       // contact.phone = phone;
+//       // contact.email = email;
+      
+//   }
+//   const newData = [...contacts.filter(item => item.id !== contactId), {
+//     id: contactId, name, phone, email,
+// }]
+
+//   })
+  dataChange(contactsPath, newData)
   return contactId
 }
 
 module.exports = {
   listContacts,
-  getContactById,
+  getById,
   removeContact,
   addContact,
   updateContact,
