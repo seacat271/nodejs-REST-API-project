@@ -26,12 +26,15 @@ const addContact = async (body) => {
  const {name, phone, email} = body;
  const contacts = await dataGet(contactsPath);
  let newId = +contacts[contacts.length - 1].id + 1 + "";
-  const checkId = () => {contacts.forEach(({id}) => {
-    if (id === newId) {
+  function checkId () {
+    contacts.forEach(({id}) => {
+    if (newId === id) {
       newId++;
-      checkId()
+      checkId();
     };
-  })}
+  })
+  return
+}
   checkId();
   const newData = [...contacts, {id: `${newId}`, name, email, phone }]
   dataChange(contactsPath, newData)
@@ -57,9 +60,9 @@ const updateContact = async (contactId, body) => {
     if (contact.id === contactId) {
       const updateContact = {
         id: contact.id,
-        name: newName ? newName: contact.name,
-        phone: newPhone ? newPhone: contact.phone,
-        email: newEmail ? newEmail: contact.email,
+        name: newName,
+        phone: newPhone,
+        email: newEmail,
       };
   const newData = [...contacts.filter(item => item.id !== contactId), updateContact];
       dataChange(contactsPath, newData)
@@ -67,21 +70,6 @@ const updateContact = async (contactId, body) => {
     } 
   }
   return
-  
-//   contacts.forEach(contact => {
-//     if(contact.id === contactId) {
-//       // contact.name = name;
-//       // contact.phone = phone;
-//       // contact.email = email;
-      
-//   }
-//   const newData = [...contacts.filter(item => item.id !== contactId), {
-//     id: contactId, name, phone, email,
-// }]
-
-//   })
-  dataChange(contactsPath, newData)
-  return contactId
 }
 
 module.exports = {
