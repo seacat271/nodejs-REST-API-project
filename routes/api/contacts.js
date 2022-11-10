@@ -8,16 +8,24 @@ const {listContacts,
 
 const router = express.Router()
 
+const schema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
+
 router.get('/', async (req, res, next) => {
   
 const contacts = await listContacts()
-  res.status(200).json(contacts)
+  res.json(contacts)
 })
+
+
 
 router.get('/:contactId', async (req, res, next) => {
   const {contactId} = req.params;
   const contactByID = await getById(contactId)
-  contactByID ? res.status(200).json(contactByID) : res.status(404).json({"message": "Not found"}) 
+  contactByID ? res.json(contactByID) : res.status(404).json({"message": "Not found"}) 
 })
 
 router.post('/', async (req, res, next) => {
@@ -25,21 +33,30 @@ router.post('/', async (req, res, next) => {
     const newContact = await addContact(req.body);
     res.status(201).json(newContact)
   } else {
+    // res.status(400).json({"message": "missing required name field",})
+  }
+  // const {phone, email,name} = req.body;
+
+  validationResult = schema.validate(req.body);
+  if(validationResult.error) {
     res.status(400).json({"message": "missing required name field",})
   }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
   const message = await removeContact(req.params.contactId);
-  message ? res.status(200).json(message) : res.status(404).json({"message": "Not found"})
+  message ? res.json(message) : res.status(404).json({"message": "Not found"})
   
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  if (Object.keys(req.body).length === 0) return res.status(400).json({"message": "missing fields"})
+  validationResult = schema.validate(req.body);
+  if(validationResult.error) {
+    res.status(400).json({"message": "missing fields"})
+  }
   const {contactId} = req.params;
   const updateData = await updateContact(contactId, req.body)
-    updateContact ? res.status(200).json(updateData) : res.status(404).json({"message": "Not found"})
+  updateData ? res.json(updateData) : res.status(404).json({"message": "Not found"})
 })
 
 module.exports = router
