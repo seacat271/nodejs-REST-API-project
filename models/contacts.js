@@ -33,7 +33,6 @@ const addContact = async (body) => {
       checkId();
     };
   })
-  return
 }
   checkId();
   const newData = [...contacts, {id: `${newId}`, name, email, phone }]
@@ -43,20 +42,20 @@ const addContact = async (body) => {
 
 const removeContact = async (contactId) => {
   const contacts = await dataGet(contactsPath);
-  for (let contact of contacts) {
+  for (const contact of contacts) {
     if (contact.id === contactId) {
       const newData = [...contacts.filter(item => item.id !== contactId)];
       dataChange(contactsPath, newData)
       return {"message": "contact deleted"}
     } 
   }
-  return
+  
 }
 
 const updateContact = async (contactId, body) => {
   const {name: newName, phone: newPhone, email: newEmail} = body;
   const contacts = await dataGet(contactsPath);
-  for (let contact of contacts) {
+  for (const contact of contacts) {
     if (contact.id === contactId) {
       const updateContact = {
         id: contact.id,
@@ -69,7 +68,7 @@ const updateContact = async (contactId, body) => {
       return updateContact
     } 
   }
-  return
+  
 }
 
 module.exports = {
