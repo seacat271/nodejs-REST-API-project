@@ -25,10 +25,17 @@ const getById = async (contactId) => {
 const addContact = async (body) => {
  const {name, phone, email} = body;
  const contacts = await dataGet(contactsPath);
-  const id = +contacts[contacts.length - 1].id + 1 + "";
-  const newData = [...contacts, {id, name, email, phone }]
+ let newId = +contacts[contacts.length - 1].id + 1 + "";
+  const checkId = () => {contacts.forEach(({id}) => {
+    if (id === newId) {
+      newId++;
+      checkId()
+    };
+  })}
+  checkId();
+  const newData = [...contacts, {id: `${newId}`, name, email, phone }]
   dataChange(contactsPath, newData)
-  return {id, name, email, phone }
+  return {id: `${newId}`, name, email, phone }
 }
 
 const removeContact = async (contactId) => {
@@ -44,9 +51,22 @@ const removeContact = async (contactId) => {
 }
 
 const updateContact = async (contactId, body) => {
-  const {name, phone, email} = body;
+  const {name: newName, phone: newPhone, email: newEmail} = body;
   const contacts = await dataGet(contactsPath);
-
+  for (let contact of contacts) {
+    if (contact.id === contactId) {
+      const updateContact = {
+        id: contact.id,
+        name: newName ? newName: contact.name,
+        phone: newPhone ? newPhone: contact.phone,
+        email: newEmail ? newEmail: contact.email,
+      };
+  const newData = [...contacts.filter(item => item.id !== contactId), updateContact];
+      dataChange(contactsPath, newData)
+      return updateContact
+    } 
+  }
+  return
   
 //   contacts.forEach(contact => {
 //     if(contact.id === contactId) {

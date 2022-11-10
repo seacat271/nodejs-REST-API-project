@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const Joi = require('joi');
 const {listContacts,
   getById,
   removeContact,
@@ -37,8 +38,8 @@ router.delete('/:contactId', async (req, res, next) => {
 router.put('/:contactId', async (req, res, next) => {
   if (Object.keys(req.body).length === 0) return res.status(400).json({"message": "missing fields"})
   const {contactId} = req.params;
-  await updateContact(contactId, req.body)
-    res.json()
+  const updateData = await updateContact(contactId, req.body)
+    updateContact ? res.status(200).json(updateData) : res.status(404).json({"message": "Not found"})
 })
 
 module.exports = router
