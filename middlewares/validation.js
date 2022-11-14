@@ -15,13 +15,13 @@ const addContactValidation = (req, res, next) => {
   next();
 }
 
-// const putContactValidation = (req, res, next) => {
-//     const validationResult = schema.validate(req.body);
-//     if(validationResult.error) {
-//         return res.status(400).json({"message": "missing fields"})
-//     }
-//     next();
-// }
+const putContactValidation = (req, res, next) => {
+    const validationResult = schema.validate(req.body);
+    if(validationResult.error) {
+        return res.status(400).json({"message": "missing fields"})
+    }
+    next();
+}
 
 module.exports = {
     addContactValidation,
