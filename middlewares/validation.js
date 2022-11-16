@@ -17,7 +17,6 @@ const contactValidation = (req, res, next) => {
     if(validationResult.error) {
         const [error] = validationResult.error.details
         next(new ValidationError(error.message))
-     
   }
   next();
 }

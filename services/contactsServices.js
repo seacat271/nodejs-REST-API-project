@@ -1,6 +1,7 @@
 const {Contact} = require('../db/postModel');
 const mongoose = require('mongoose');
 const { noIdError, noValidIdError } = require('../helpers/errors');
+const { checkByID } = require('../helpers/checkByID');
 
 const getContacts = async () => {
     const contacts = await Contact.find({})
@@ -8,13 +9,8 @@ const getContacts = async () => {
 };
 
 const getContactById = async (id) => {
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        throw new noValidIdError("Not valid ID")
-    };
+    await checkByID(Contact, id);
     const contactByID = await Contact.findById(id)
-    if(!contactByID) {
-        throw new noIdError("Not found")
-    }
     return contactByID;
 };
 
@@ -25,35 +21,17 @@ const addContact = async ({phone, email, name, favorite}) => {
 };
 
 const changeContactById = async (id, { phone, email, name }) => {
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        throw new noValidIdError("Not valid ID")
-    };
-    const contactByID = await Contact.findById(id);
-    if(!contactByID) {
-        throw new noIdError("Not found")
-    }
+    await checkByID(Contact, id);
     const updateContact = await Contact.findByIdAndUpdate(id, { $set: { phone, email, name } }, {returnDocument: 'after'});
     return updateContact;
 };
 const deleteContactById = async (id) => {
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        throw new noValidIdError("Not valid ID")
-    };
-    const contactByID = await Contact.findById(id);
-    if(!contactByID) {
-        throw new noIdError("Not found")
-    }
+    await checkByID(Contact, id);
     await Contact.findByIdAndDelete(id);
 };
 
 const updateStatusContact = async (id, {favorite}) => {
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        throw new noValidIdError("Not valid ID")
-    };
-    const contactByID = await Contact.findById(id);
-    if(!contactByID) {
-        throw new noIdError("Not found")
-    }
+    await checkByID(Contact, id);
     const updateContact = await Contact.findByIdAndUpdate(id, {$set: {favorite}}, {returnDocument: 'after'});
     return updateContact;
 }
