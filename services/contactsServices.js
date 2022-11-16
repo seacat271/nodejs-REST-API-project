@@ -1,4 +1,5 @@
 const {Contact} = require('../db/postModel');
+const { noIdError } = require('../helpers/errors');
 
 const getContacts = async () => {
     const contacts = await Contact.find({})
@@ -8,7 +9,7 @@ const getContacts = async () => {
 const getContactById = async (id) => {
     const contactByID = await Contact.findById(id)
     if(!contactByID) {
-        return res.status(404).json({"message": "Not found"}) 
+        throw new noIdError("Not found")
     }
     return contactByID;
 };
@@ -22,7 +23,7 @@ const addContact = async ({phone, email, name}) => {
 const changeContactById = async (id, { phone, email, name }) => {
     const contactByID = await Contact.findById(id);
     if(!contactByID) {
-        return res.status(404).json({"message": "Not found"}) 
+        throw new noIdError("Not found")
     }
     await Contact.findByIdAndUpdate(id, { $set: { phone, email, name } });
     const updateContact = await Contact.findById(id);
@@ -30,10 +31,9 @@ const changeContactById = async (id, { phone, email, name }) => {
 };
 const deleteContactById = async (id) => {
     const contactByID = await Contact.findById(id);
-    console.log(contactByID)
-    // if(!contactByID) {
-    //     return res.status(404).json({"message": "Not found"}) 
-    // }
+    if(!contactByID) {
+        throw new noIdError("Not found")
+    }
     await Contact.findByIdAndDelete(id);
 };
 

@@ -4,8 +4,6 @@ const asyncWrapper = controller => {
     }
 }
 
-
-
 module.exports = {
     asyncWrapper
 }

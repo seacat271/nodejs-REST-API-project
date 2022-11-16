@@ -12,17 +12,10 @@ class noIdError extends Error {
     }
 }
 
-const errorHandler =  (err, req, res, next) => {
-    res.status(500).json({ message: err.message })
-  }
-const errorRoute = (req, res) => {
-    res.status(404).json({ message: 'Not found' })
-  }
+
 
 
 module.exports = {
     ValidationError,
     noIdError,
-    errorHandler,
-    errorRoute
 }

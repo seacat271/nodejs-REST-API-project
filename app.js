@@ -4,7 +4,7 @@ const cors = require('cors')
 
 
 const contactsRouter = require('./routes/api/contacts')
-const { errorHandler, errorRoute } = require('./helpers/errors')
+const { errorHandler, errorRoute } = require('./helpers/APIHelpers')
 
 const app = express()
 

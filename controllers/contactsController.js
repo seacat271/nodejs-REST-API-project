@@ -39,7 +39,7 @@ const putContactController = async (req, res) => {
     const { phone, email, name } = req.body;
     const { contactId } = req.params;
     const updateContact = await changeContactById(contactId, { phone, email, name })
-        res.json(updateContact)
+    res.json(updateContact)
 
 };
 

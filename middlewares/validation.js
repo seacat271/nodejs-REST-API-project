@@ -10,7 +10,8 @@ const schema = Joi.object({
 const contactValidation = (req, res, next) => {
     const validationResult = schema.validate(req.body);
     if(validationResult.error) {
-        next(new ValidationError(validationResult.error.details))
+        const [error] = validationResult.error.details
+        next(new ValidationError(error.message))
      
   }
   next();
