@@ -10,8 +10,9 @@ const start = async () => {
       if(error) console.error(`Error server launch:`, error)
       console.log(`Server running. Use our API on port: ${PORT}`)
     })
-  } catch{error}
+  } catch{error => console.log(error)}
 }
+
 start();
 
 
