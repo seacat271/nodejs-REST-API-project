@@ -5,8 +5,8 @@ const getContacts = async () => {
     return contacts
 };
 
-const getContactById = async ({contactId}) => {
-    const contactByID = await Contact.findById(contactId)
+const getContactById = async (id) => {
+    const contactByID = await Contact.findById(id)
     if(!contactByID) {
         return res.status(404).json({"message": "Not found"}) 
     }
@@ -22,12 +22,12 @@ const addContact = async ({phone, email, name}) => {
 const changeContactById = async () => {
 
 };
-const deleteContactById = async ({contactId}) => {
-    const contactByID = await Contact.findById(contactId);
+const deleteContactById = async (id) => {
+    const contactByID = await Contact.findById(id);
     if(!contactByID) {
         return res.status(404).json({"message": "Not found"}) 
     }
-    await Contact.findByIdAndDelete(contactId);
+    await Contact.findByIdAndDelete(id);
 
 };
 

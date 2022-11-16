@@ -17,19 +17,21 @@ const getContactsController = async (req, res) => {
 };
 
 const getContactByIdController = async (req, res) => {
-  const contactByID = await getContactById(req.params);
+    const {contactId} = req.params
+  const contactByID = await getContactById(contactId);
   res.json(contactByID);
 };
 
 const postContactController = async (req, res) => {
-  const newContact = await addContact(req.body);
+    const {phone, email, name} = req.body
+  const newContact = await addContact({phone, email, name});
   res.status(201).json(newContact);
 };
 
 const deleteContactController = async (req, res) => {
-        await deleteContactById(req.params)
+    const {contactId} = req.params;
+    await deleteContactById(contactId);
     res.json({ message: "contact deleted" })
-
 };
 
 const putContactController = async (req, res) => {
