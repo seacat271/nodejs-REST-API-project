@@ -37,9 +37,9 @@ const deleteContactController = async (req, res) => {
 };
 
 const putContactController = async (req, res) => {
-    const { phone, email, name } = req.body;
+    const { phone, email, name, favorite = false } = req.body;
     const { contactId } = req.params;
-    const updateContact = await changeContactById(contactId, { phone, email, name })
+    const updateContact = await changeContactById(contactId, { phone, email, name, favorite})
     res.json(updateContact)
 
 };

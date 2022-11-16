@@ -5,6 +5,7 @@ const schemaContact = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required().email(),
     phone: Joi.string().required(),
+    favorite: Joi.boolean().optional()
   });
 
 const schemaStatus = Joi.object({
