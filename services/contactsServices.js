@@ -19,16 +19,22 @@ const addContact = async ({phone, email, name}) => {
     return newContact;
 };
 
-const changeContactById = async () => {
-
-};
-const deleteContactById = async (id) => {
+const changeContactById = async (id, { phone, email, name }) => {
     const contactByID = await Contact.findById(id);
     if(!contactByID) {
         return res.status(404).json({"message": "Not found"}) 
     }
+    await Contact.findByIdAndUpdate(id, { $set: { phone, email, name } });
+    const updateContact = await Contact.findById(id);
+    return updateContact;
+};
+const deleteContactById = async (id) => {
+    const contactByID = await Contact.findById(id);
+    console.log(contactByID)
+    // if(!contactByID) {
+    //     return res.status(404).json({"message": "Not found"}) 
+    // }
     await Contact.findByIdAndDelete(id);
-
 };
 
 module.exports = {

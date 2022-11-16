@@ -28,6 +28,7 @@ const postContactController = async (req, res) => {
   res.status(201).json(newContact);
 };
 
+
 const deleteContactController = async (req, res) => {
     const {contactId} = req.params;
     await deleteContactById(contactId);
@@ -35,14 +36,11 @@ const deleteContactController = async (req, res) => {
 };
 
 const putContactController = async (req, res) => {
-  const { phone, email, name } = req.body;
-  const { contactId } = req.params;
-  const contactByID = await Contact.findById(contactId);
-  await Contact.findByIdAndUpdate(contactId, { $set: { phone, email, name } });
-  const updateContact = await Contact.findById(contactId);
-  contactByID
-    ? res.json(updateContact)
-    : res.status(404).json({ message: "Not found" });
+    const { phone, email, name } = req.body;
+    const { contactId } = req.params;
+    const updateContact = await changeContactById(contactId, { phone, email, name })
+        res.json(updateContact)
+
 };
 
 module.exports = {

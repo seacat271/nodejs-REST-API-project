@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { ValidationError } = require('../helpers/errors');
 
 const schema = Joi.object({
     name: Joi.string().required(),
@@ -6,24 +7,16 @@ const schema = Joi.object({
     phone: Joi.string().required(),
   });
 
-const addContactValidation = (req, res, next) => {
+const contactValidation = (req, res, next) => {
     const validationResult = schema.validate(req.body);
     if(validationResult.error) {
-        return res.status(400).json({"message": "missing required name field",})
+        next(new ValidationError(validationResult.error.details))
      
   }
   next();
 }
 
-const putContactValidation = (req, res, next) => {
-    const validationResult = schema.validate(req.body);
-    if(validationResult.error) {
-        return res.status(400).json({"message": "missing fields"})
-    }
-    next();
-}
-
 module.exports = {
-    addContactValidation,
-    putContactValidation,
+    contactValidation,
+  
   }
