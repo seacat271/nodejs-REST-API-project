@@ -1,6 +1,4 @@
 const {Contact} = require('../db/postModel');
-const mongoose = require('mongoose');
-const { noIdError, noValidIdError } = require('../helpers/errors');
 const { checkByID } = require('../helpers/checkByID');
 
 const getContacts = async () => {

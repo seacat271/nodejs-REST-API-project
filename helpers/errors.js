@@ -5,20 +5,14 @@ class ValidationError extends Error {
     }
 }
 
-class noIdError extends Error {
+class NoValidIdError extends Error {
     constructor (message) {
         super (message);
         this.status = 404;
     }
 }
-class noValidIdError extends noIdError {
-    constructor (message) {
-        super (message);
-    }
-}
 
 module.exports = {
     ValidationError,
-    noIdError,
-    noValidIdError
+    NoValidIdError
 }
