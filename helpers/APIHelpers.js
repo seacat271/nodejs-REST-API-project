@@ -1,8 +1,10 @@
-const { ValidationError, noIdError } = require('../helpers/errors');
+const { ValidationError, noIdError, noValidIdError } = require('../helpers/errors');
 
 
 const errorHandler =  (error, req, res, next) => {
-    if(error instanceof ValidationError || error instanceof noIdError) {
+    if(error instanceof ValidationError || 
+      error instanceof noIdError || 
+      error instanceof noValidIdError) {
         return res.status(error.status).json({message: error.message})
     }
    console.log(error)

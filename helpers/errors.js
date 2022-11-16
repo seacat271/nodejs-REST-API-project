@@ -11,11 +11,15 @@ class noIdError extends Error {
         this.status = 404;
     }
 }
-
-
-
+class noValidIdError extends Error {
+    constructor (message) {
+        super (message);
+        this.status = 404;
+    }
+}
 
 module.exports = {
     ValidationError,
     noIdError,
+    noValidIdError
 }

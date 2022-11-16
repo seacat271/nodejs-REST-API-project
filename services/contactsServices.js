@@ -1,5 +1,6 @@
 const {Contact} = require('../db/postModel');
-const { noIdError } = require('../helpers/errors');
+const mongoose = require('mongoose');
+const { noIdError, noValidIdError } = require('../helpers/errors');
 
 const getContacts = async () => {
     const contacts = await Contact.find({})
@@ -7,6 +8,9 @@ const getContacts = async () => {
 };
 
 const getContactById = async (id) => {
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        throw new noValidIdError("Not valid ID")
+    };
     const contactByID = await Contact.findById(id)
     if(!contactByID) {
         throw new noIdError("Not found")
