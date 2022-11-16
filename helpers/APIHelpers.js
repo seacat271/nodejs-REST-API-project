@@ -12,7 +12,7 @@ const errorHandler =  (error, req, res, next) => {
   }
   
 const errorRoute = (req, res) => {
-    return res.status(405).json({ message: 'Not found' })
+    return res.status(400).json({ message: 'Not found' })
   }
 
   module.exports = {

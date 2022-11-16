@@ -25,15 +25,20 @@ const addContact = async ({phone, email, name}) => {
 };
 
 const changeContactById = async (id, { phone, email, name }) => {
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        throw new noValidIdError("Not valid ID")
+    };
     const contactByID = await Contact.findById(id);
     if(!contactByID) {
         throw new noIdError("Not found")
     }
-    await Contact.findByIdAndUpdate(id, { $set: { phone, email, name } });
-    const updateContact = await Contact.findById(id);
+    const updateContact = await Contact.findByIdAndUpdate(id, { $set: { phone, email, name } }, {returnDocument: 'after'});
     return updateContact;
 };
 const deleteContactById = async (id) => {
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        throw new noValidIdError("Not valid ID")
+    };
     const contactByID = await Contact.findById(id);
     if(!contactByID) {
         throw new noIdError("Not found")
@@ -41,10 +46,23 @@ const deleteContactById = async (id) => {
     await Contact.findByIdAndDelete(id);
 };
 
+const updateStatusContact = async (id, {favorite}) => {
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        throw new noValidIdError("Not valid ID")
+    };
+    const contactByID = await Contact.findById(id);
+    if(!contactByID) {
+        throw new noIdError("Not found")
+    }
+    const updateContact = await Contact.findByIdAndUpdate(id, {$set: {favorite}}, {returnDocument: 'after'});
+    return updateContact;
+}
+
 module.exports = {
     getContacts,
     getContactById,
     addContact,
     changeContactById,
     deleteContactById,
+    updateStatusContact,
 }

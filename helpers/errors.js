@@ -11,10 +11,9 @@ class noIdError extends Error {
         this.status = 404;
     }
 }
-class noValidIdError extends Error {
+class noValidIdError extends noIdError {
     constructor (message) {
         super (message);
-        this.status = 404;
     }
 }
 

@@ -9,6 +9,7 @@ const {
   addContact,
   changeContactById,
   deleteContactById,
+  updateStatusContact,
 } = require("../services/contactsServices");
 
 const getContactsController = async (req, res) => {
@@ -43,10 +44,18 @@ const putContactController = async (req, res) => {
 
 };
 
+const statusContactController = async (req, res) =>{
+    const {favorite} = req.body;
+    const { contactId} = req.params;
+    const updateContact = await updateStatusContact(contactId, {favorite})
+    res.json(updateContact)
+}
+
 module.exports = {
   getContactsController,
   getContactByIdController,
   postContactController,
   deleteContactController,
   putContactController,
+  statusContactController,
 };
