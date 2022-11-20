@@ -1,12 +1,15 @@
 const express = require("express");
 const {
+    registerValidation,
+  } = require("../../middlewares/validation");
+const {
 } = require("../../controllers/contactsController");
 
 const { asyncWrapper } = require("../../helpers/asyncWrapper");
 
 const router = express.Router();
 
-router.post("/registration", asyncWrapper(registrationController));
+router.post("/register", registerValidation, asyncWrapper(registrationController));
 
 router.post("/login", asyncWrapper(loginController));
 
