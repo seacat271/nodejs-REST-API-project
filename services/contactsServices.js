@@ -12,8 +12,8 @@ const getContactById = async (id) => {
     return contactByID;
 };
 
-const addContact = async ({phone, email, name, favorite}) => {
-    const newContact = new Contact({phone, email, name, favorite});
+const addContact = async ({phone, email, name, favorite, userId}) => {
+    const newContact = new Contact({phone, email, name, favorite, owner});
     await newContact.save();
     return newContact;
 };

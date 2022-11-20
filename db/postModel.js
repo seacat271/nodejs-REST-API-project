@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const contactSchema = new mongoose.Schema({
-  // owner: {
-  //   type: SchemaTypes.ObjectId,
-  //   ref: 'users',
-  // },
+  owner: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'users',
+  },
     name: {
       type: String,
       required: [true, 'Set name for contact'],
