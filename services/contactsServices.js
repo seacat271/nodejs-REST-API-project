@@ -1,8 +1,8 @@
 const {Contact} = require('../db/postModel');
 const { checkByID } = require('../helpers/checkByID');
 
-const getContacts = async () => {
-    const contacts = await Contact.find({})
+const getContacts = async (owner) => {
+    const contacts = await Contact.find({owner})
     return contacts
 };
 
@@ -12,7 +12,7 @@ const getContactById = async (id) => {
     return contactByID;
 };
 
-const addContact = async ({phone, email, name, favorite, userId}) => {
+const addContact = async ({phone, email, name, favorite, owner}) => {
     const newContact = new Contact({phone, email, name, favorite, owner});
     await newContact.save();
     return newContact;

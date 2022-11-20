@@ -8,7 +8,8 @@ const {
 } = require("../services/contactsServices");
 
 const getContactsController = async (req, res) => {
-  const contacts = await getContacts();
+  const {_id: owner} = req.user;
+  const contacts = await getContacts(owner);
   res.json(contacts);
 };
 
