@@ -6,7 +6,7 @@ const dbInitConfig = {
 }
 
 const connectMongo = async () => {
-    await mongoose.connect(process.env.MONGO_URL, dbInitConfig)
+    await mongoose.connect(process.env.MONGO_URL || "", dbInitConfig)
     .then(
         () => console.log("Database connection successful"),
         (error) => {
