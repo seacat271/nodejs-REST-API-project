@@ -3,6 +3,7 @@ const {
   contactValidation,
   patchStatusValidation,
 } = require("../../middlewares/validation");
+
 const {
   getContactsController,
   getContactByIdController,
@@ -12,9 +13,10 @@ const {
   statusContactController,
 } = require("../../controllers/contactsController");
 const { asyncWrapper } = require("../../helpers/asyncWrapper");
+const { authMiddleware } = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
-
+router.use(authMiddleware);
 router.get("/", asyncWrapper(getContactsController));
 
 router.get("/:contactId", asyncWrapper(getContactByIdController));
