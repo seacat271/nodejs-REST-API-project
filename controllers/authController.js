@@ -7,8 +7,8 @@ const registerController = async (req, res) => {
 };
 const loginController = async (req, res) => {
     const { email, password } = req.body;
-    token = await login(email, password);
-    return res.json(token);
+    user = await login(email, password);
+    return res.json(user);
 };
 const logoutController =async () => {};
 

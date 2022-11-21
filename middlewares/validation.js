@@ -14,7 +14,7 @@ const schemaStatus = Joi.object({
 
 const schemaRegister = Joi.object({
     password: Joi.string().trim(true).min(4).max(10).required(),
-    email: Joi.string().email().required(),
+    email: Joi.string().trim(true).email().required(),
 });
 
 
@@ -35,7 +35,7 @@ const patchStatusValidation = (req, res, next) => {
     next();
 }
 
-const registerValidation = (req, res, next) => {
+const authValidation = (req, res, next) => {
   const validationResult = schemaRegister.validate(req.body);
   if(validationResult.error) {
     const [error] = validationResult.error.details
@@ -48,6 +48,6 @@ const registerValidation = (req, res, next) => {
 module.exports = {
     contactValidation,
     patchStatusValidation,
-    registerValidation,
+    authValidation,
   
   }

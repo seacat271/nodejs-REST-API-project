@@ -25,9 +25,17 @@ class NotAuthorizedError extends CustomError {
     }
 }
 
+class ConflictEmailError extends CustomError {
+    constructor (message) {
+        super (message);
+        this.status = 409;
+    }
+}
+
 module.exports = {
     CustomError,
     ValidationError,
     NoValidIdError,
-    NotAuthorizedError
+    NotAuthorizedError,
+    ConflictEmailError
 }
