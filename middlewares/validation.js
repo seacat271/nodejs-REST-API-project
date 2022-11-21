@@ -2,9 +2,9 @@ const Joi = require('joi');
 const { ValidationError } = require('../helpers/errors');
 
 const schemaContact = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().required().email(),
-    phone: Joi.string().required(),
+    name: Joi.string().trim(true).required(),
+    email: Joi.string().trim(true).required().email(),
+    phone: Joi.string().trim(true).required(),
     favorite: Joi.boolean().optional()
   });
 
@@ -13,8 +13,8 @@ const schemaStatus = Joi.object({
   });
 
 const schemaRegister = Joi.object({
-    password: Joi.string().required(),
-    email: Joi.string().required().email(),
+    password: Joi.string().trim(true).min(4).max(10).required(),
+    email: Joi.string().email().required(),
 });
 
 
