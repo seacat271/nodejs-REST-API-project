@@ -9,21 +9,21 @@ const authMiddleware = async (req, res, next) => {
    
         const user = jwt.verify(token, process.env.JWT_SECRET);
         if(!user) {
-            next(new NotAuthorizedError("Not authorized INVALID"))
+            next(new NotAuthorizedError("Not authorized"))
         }
-        user.token = token;
         const userById = await User.findById(user._id)
         if (!userById) {
-            next(new NotAuthorizedError("Not authorized NOUSER"))
+            next(new NotAuthorizedError("Not authorized"))
         }
         if (userById.token !==  token) {
-            next(new NotAuthorizedError("Not authorized TOKEN"))
+            next(new NotAuthorizedError("Not authorized"))
         }
         req.user = user;
+
     } catch (error) {
-        next(new NotAuthorizedError("Not authorized ALL"))
+        next(new NotAuthorizedError("Not authorized"))
     }
-next()
+    next()
 }
 module.exports = {
     authMiddleware,
