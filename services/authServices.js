@@ -1,7 +1,7 @@
 const { User } = require("../db/userModel");
 const { NotAuthorizedError, ConflictEmailError } = require("../helpers/errors");
-var jwt = require("jsonwebtoken");
 const { checkPassword } = require("../helpers/cryptPassword");
+const { tokenCreate } = require("../helpers/tokenHelper");
 
 const register = async (email, password) => {
   if (await User.findOne({ email })) {
@@ -18,28 +18,25 @@ const login = async (email, password) => {
     throw new NotAuthorizedError("Email or password is wrong");
   }
   await checkPassword(password, user.password)
-  const token = jwt.sign(
-    {
-      _id: user._id,
-      subscription: user.subscription,
-    },
-    process.env.JWT_SECRET
-  );
+  const token = tokenCreate({
+    _id: user._id,
+    subscription: user.subscription,
+  })
+  
+  ;
   const updateUser = await User.findByIdAndUpdate(
     user._id,
     { $set: { token } },
     { returnDocument: "after" }
   );
-  return {
-    token,
-    user: { email: updateUser.email, subscription: updateUser.subscription },
-  };
+  return {token, user: { email: updateUser.email, subscription: updateUser.subscription }};
 };
 
 const logout = async (userId) => {
   await User.findByIdAndUpdate(userId, { $set: { token: null} })
   return
 };
+
 const currentUser = async (userId) => {
   const userById = await User.findById(userId)
   return {email: userById.email, subscription: userById.subscription}
