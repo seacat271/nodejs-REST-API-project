@@ -1,10 +1,7 @@
 const { User } = require("../db/userModel");
-
 const { NotAuthorizedError, ConflictEmailError } = require("../helpers/errors");
-const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
-
-// const { checkByID } = require('../helpers/checkByID');
+const { checkPassword } = require("../helpers/cryptPassword");
 
 const register = async (email, password) => {
   if (await User.findOne({ email })) {
@@ -20,9 +17,7 @@ const login = async (email, password) => {
   if (!user) {
     throw new NotAuthorizedError("Email or password is wrong");
   }
-  if (!(await bcrypt.compare(password, user.password))) {
-    throw new NotAuthorizedError("Email or password is wrong");
-  }
+  await checkPassword(password, user.password)
   const token = jwt.sign(
     {
       _id: user._id,

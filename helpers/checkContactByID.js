@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const {NoValidIdError } = require('../helpers/errors');
+const {NoValidIdError } = require('./errors');
 
-const checkByID = async(database, id) => {
+const checkContactByID = async(database, id) => {
     if(!mongoose.Types.ObjectId.isValid(id)) {
         throw new NoValidIdError("Not valid ID")
     };
@@ -12,5 +12,5 @@ const checkByID = async(database, id) => {
 }
 
 module.exports ={
-    checkByID
+    checkContactByID
 }
