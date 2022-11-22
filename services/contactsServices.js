@@ -2,14 +2,18 @@ const { Contact } = require("../db/contactModel");
 const { checkContact } = require("../helpers/checkContact");
 
 
-const getContacts = async (owner, {page, limit}) => {
+const getContacts = async (owner, {page, limit, favorite}) => {
+
     const skip = (page - 1)*limit;
     const contacts = await Contact.find({ owner }).select({__v: 0}).skip(skip).limit(parseInt(limit));
+    favorite ?? contacts.filter(contact => contact.favorite === favorite);
+    console.log(contacts)
+    console.log(contacts.filter(contact => contact.favorite === favorite))
     return contacts;
 };
 
 const getContactById = async (id, owner) => {
-    const contactByID = await checkContact(id, owner).select({__v: 0});
+    const contactByID = await checkContact(id, owner);
   return contactByID;
 };
 
