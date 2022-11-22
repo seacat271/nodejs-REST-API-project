@@ -2,21 +2,17 @@ const { User } = require("../db/userModel");
 const { NotAuthorizedError, ConflictEmailError } = require("../helpers/errors");
 const { checkPassword } = require("../helpers/cryptPassword");
 const { tokenCreate } = require("../helpers/tokenHelper");
+const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
 
 const register = async (email, password) => {
-  if (await User.findOne({ email })) {
-    throw new ConflictEmailError("Email in use");
-  }
+  await findCheckUserByEmail(email, "Email in use")
   const user = new User({ email, password });
   const newUser = await user.save();
   return { user: { email: newUser.email, subscription: newUser.subscription } };
 };
 
 const login = async (email, password) => {
-  const user = await User.findOne({ email });
-  if (!user) {
-    throw new NotAuthorizedError("Email or password is wrong");
-  }
+  const user = await findCheckUserByEmail(email, "Email or password is wrong");
   await checkPassword(password, user.password)
   const token = tokenCreate({
     _id: user._id,
