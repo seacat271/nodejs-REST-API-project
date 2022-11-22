@@ -3,12 +3,9 @@ const { checkContact } = require("../helpers/checkContact");
 
 
 const getContacts = async (owner, {page, limit, favorite}) => {
-
     const skip = (page - 1)*limit;
     const contacts = await Contact.find({ owner }).select({__v: 0}).skip(skip).limit(parseInt(limit));
-    favorite ?? contacts.filter(contact => contact.favorite === favorite);
-    console.log(contacts)
-    console.log(contacts.filter(contact => contact.favorite === favorite))
+    if (favorite) return contacts.filter(contact => contact.favorite.toString() === favorite);
     return contacts;
 };
 
