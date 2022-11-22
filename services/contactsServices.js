@@ -1,14 +1,15 @@
-const { Contact } = require("../db/postModel");
-const { checkContactByID } = require("../helpers/checkContactByID");
+const { Contact } = require("../db/contactModel");
+const { checkContact } = require("../helpers/checkContact");
 
-const getContacts = async (owner) => {
-  const contacts = await Contact.find({ owner });
-  return contacts;
+
+const getContacts = async (owner, {page, limit}) => {
+    const skip = (page - 1)*limit;
+    const contacts = await Contact.find({ owner }).select({__v: 0}).skip(skip).limit(parseInt(limit));
+    return contacts;
 };
 
-const getContactById = async (id) => {
-  await checkContactByID(Contact, id);
-  const contactByID = await Contact.findById(id);
+const getContactById = async (id, owner) => {
+    const contactByID = await checkContact(id, owner).select({__v: 0});
   return contactByID;
 };
 
@@ -18,27 +19,27 @@ const addContact = async ({ phone, email, name, favorite, owner }) => {
   return newContact;
 };
 
-const changeContactById = async (id, { phone, email, name }) => {
-  await checkContactByID(Contact, id);
+const changeContactById = async (id, { phone, email, name}, owner ) => {
+  await checkContact(id, owner)
   const updateContact = await Contact.findByIdAndUpdate(
     id,
     { $set: { phone, email, name } },
     { returnDocument: "after" }
-  );
+  ).select({__v: 0});
   return updateContact;
 };
-const deleteContactById = async (id) => {
-  await checkContactByID(Contact, id);
+const deleteContactById = async (id, owner) => {
+  await checkContact(id, owner)
   await Contact.findByIdAndDelete(id);
 };
 
-const updateStatusContact = async (id, { favorite }) => {
-  await checkContactByID(Contact, id);
+const updateStatusContact = async (id, { favorite }, owner) => {
+  await checkContact(id, owner)
   const updateContact = await Contact.findByIdAndUpdate(
     id,
     { $set: { favorite } },
     { returnDocument: "after" }
-  );
+  ).select({__v: 0});
   return updateContact;
 };
 

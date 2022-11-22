@@ -8,14 +8,16 @@ const {
 } = require("../services/contactsServices");
 
 const getContactsController = async (req, res) => {
+  const {page = 1, limit = 20} = req.query;
   const {_id: owner} = req.user;
-  const contacts = await getContacts(owner);
-  res.json(contacts);
+  const contacts = await getContacts(owner, {page, limit});
+  res.json({contacts, page, limit});
 };
 
 const getContactByIdController = async (req, res) => {
+  const {_id: owner} = req.user;
   const {contactId} = req.params
-  const contactByID = await getContactById(contactId);
+  const contactByID = await getContactById(contactId, owner);
   res.json(contactByID);
 };
 
@@ -29,22 +31,25 @@ const postContactController = async (req, res) => {
 
 const deleteContactController = async (req, res) => {
     const {contactId} = req.params;
-    await deleteContactById(contactId);
+    const {_id: owner} = req.user;
+    await deleteContactById(contactId, owner);
     res.json({ message: "contact deleted" })
 };
 
 const putContactController = async (req, res) => {
     const { phone, email, name} = req.body;
+    const {_id: owner} = req.user;
     const { contactId } = req.params;
-    const updateContact = await changeContactById(contactId, { phone, email, name})
+    const updateContact = await changeContactById(contactId, { phone, email, name}, owner)
     res.json(updateContact)
 
 };
 
 const statusContactController = async (req, res) =>{
+    const {_id: owner} = req.user;
     const {favorite} = req.body;
     const {contactId} = req.params;
-    const updateContact = await updateStatusContact(contactId, {favorite})
+    const updateContact = await updateStatusContact(contactId, {favorite}, owner)
     res.json(updateContact)
 }
 

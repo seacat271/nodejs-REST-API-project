@@ -14,6 +14,7 @@ const contactSchema = new mongoose.Schema({
     },
     phone: {
       type: String,
+      
     },
     favorite: {
       type: Boolean,
