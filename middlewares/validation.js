@@ -17,6 +17,14 @@ const schemaRegister = Joi.object({
     email: Joi.string().trim(true).email().required(),
 });
 
+const schemaSubscription = Joi.object({
+  subscription: Joi.guid({
+    version: [
+      "starter",
+      "pro",
+      "business"]}).required()
+});
+
 
 const contactValidation = (req, res, next) => {
     const validationResult = schemaContact.validate(req.body);
@@ -44,10 +52,20 @@ const authValidation = (req, res, next) => {
   next();
 }
 
+const subscriptionValidation = (req, res, next) => {
+  const validationResult = schemaSubscription.validate(req.body);
+  if(validationResult.error) {
+    const [error] = validationResult.error.details
+    next(new ValidationError(error.message))
+}
+  next();
+}
+
 
 module.exports = {
     contactValidation,
     patchStatusValidation,
     authValidation,
+    subscriptionValidation,
   
   }

@@ -28,9 +28,19 @@ const currentUser = async (userId) => {
   return {email: userById.email, subscription: userById.subscription}
 }
 
+const patchSubscription = async (userId, {subscription}) => {
+  const updateContact = await User.findByIdAndUpdate(
+    userId,
+    { $set: { subscription } },
+    { returnDocument: "after" }
+  );
+  return updateContact;
+}
+
 module.exports = {
   register,
   login,
   logout,
   currentUser,
+  patchSubscription,
 };

@@ -43,7 +43,7 @@ const putContactController = async (req, res) => {
 
 const statusContactController = async (req, res) =>{
     const {favorite} = req.body;
-    const { contactId} = req.params;
+    const {contactId} = req.params;
     const updateContact = await updateStatusContact(contactId, {favorite})
     res.json(updateContact)
 }
