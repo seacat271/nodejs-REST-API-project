@@ -19,6 +19,7 @@ router.post("/register", authValidation, asyncWrapper(registerController));
 router.post("/login", authValidation, asyncWrapper(loginController));
 
 router.post("/logout", authMiddleware, asyncWrapper(logoutController));
-router.get("/current", authMiddleware, asyncWrapper(currentUserController))
+
+router.get("/current", authMiddleware, asyncWrapper(currentUserController));
 
 module.exports = router;

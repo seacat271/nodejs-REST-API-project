@@ -1,5 +1,4 @@
 const { User } = require("../db/userModel");
-const { NotAuthorizedError, ConflictEmailError } = require("../helpers/errors");
 const { checkPassword } = require("../helpers/cryptPassword");
 const { tokenCreate } = require("../helpers/tokenHelper");
 const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
@@ -14,17 +13,8 @@ const register = async (email, password) => {
 const login = async (email, password) => {
   const user = await findCheckUserByEmail(email, "Email or password is wrong");
   await checkPassword(password, user.password)
-  const token = tokenCreate({
-    _id: user._id,
-    subscription: user.subscription,
-  })
-  
-  ;
-  const updateUser = await User.findByIdAndUpdate(
-    user._id,
-    { $set: { token } },
-    { returnDocument: "after" }
-  );
+  const token = tokenCreate({subscription: user.subscription});
+  const updateUser = await User.findByIdAndUpdate(user._id, { $set: { token }}, { returnDocument: "after" });
   return {token, user: { email: updateUser.email, subscription: updateUser.subscription }};
 };
 
