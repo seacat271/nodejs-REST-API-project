@@ -13,7 +13,7 @@ const register = async (email, password) => {
 const login = async (email, password) => {
   const user = await findCheckUserByEmail(email, "Email or password is wrong");
   await checkPassword(password, user.password)
-  const token = tokenCreate({subscription: user.subscription});
+  const token = tokenCreate({_id: user._id, subscription: user.subscription});
   const updateUser = await User.findByIdAndUpdate(user._id, { $set: { token }}, { returnDocument: "after" });
   return {token, user: { email: updateUser.email, subscription: updateUser.subscription }};
 };
@@ -28,13 +28,14 @@ const currentUser = async (userId) => {
   return {email: userById.email, subscription: userById.subscription}
 }
 
-const patchSubscription = async (userId, {subscription}) => {
-  const updateContact = await User.findByIdAndUpdate(
+const changeUSubscription = async (userId, {subscription}) => {
+  const token = tokenCreate({_id: userId, subscription})
+  const updateUser = await User.findByIdAndUpdate(
     userId,
-    { $set: { subscription } },
+    { $set: { subscription, token } },
     { returnDocument: "after" }
   );
-  return updateContact;
+  return {token, user: { email: updateUser.email, subscription: updateUser.subscription }};
 }
 
 module.exports = {
@@ -42,5 +43,5 @@ module.exports = {
   login,
   logout,
   currentUser,
-  patchSubscription,
+  changeUSubscription,
 };

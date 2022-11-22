@@ -1,4 +1,4 @@
-const { register, login, logout, currentUser, updateUser } = require("../services/authServices");
+const { register, login, logout, currentUser, changeUSubscription } = require("../services/authServices");
 
 const registerController = async (req, res) => {
     const { email, password } = req.body;
@@ -24,7 +24,7 @@ const currentUserController = async (req, res) => {
 const subscriptionController = async (req, res) => {
   const {_id: userId} = req.user;
   const {subscription} = req.body;
-  const updateUser = await updateUser(userId, {subscription})
+  const updateUser = await changeUSubscription(userId, {subscription})
   res.json(updateUser) 
 }
 

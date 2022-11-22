@@ -4,7 +4,7 @@ const tokenCreate = data => {
     return jwt.sign(data, process.env.JWT_SECRET);
 }
 
-const tokenVerify = (token) => {
+const tokenVerify = token => {
     return jwt.verify(token, process.env.JWT_SECRET);
 }
 

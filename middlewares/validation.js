@@ -18,11 +18,7 @@ const schemaRegister = Joi.object({
 });
 
 const schemaSubscription = Joi.object({
-  subscription: Joi.guid({
-    version: [
-      "starter",
-      "pro",
-      "business"]}).required()
+  subscription: Joi.string().valid("starter", "pro", "business").required()
 });
 
 
@@ -43,15 +39,6 @@ const patchStatusValidation = (req, res, next) => {
     next();
 }
 
-const authValidation = (req, res, next) => {
-  const validationResult = schemaRegister.validate(req.body);
-  if(validationResult.error) {
-    const [error] = validationResult.error.details
-    next(new ValidationError(error.message))
-}
-  next();
-}
-
 const subscriptionValidation = (req, res, next) => {
   const validationResult = schemaSubscription.validate(req.body);
   if(validationResult.error) {
@@ -61,6 +48,14 @@ const subscriptionValidation = (req, res, next) => {
   next();
 }
 
+const authValidation = (req, res, next) => {
+  const validationResult = schemaRegister.validate(req.body);
+  if(validationResult.error) {
+    const [error] = validationResult.error.details
+    next(new ValidationError(error.message))
+}
+  next();
+}
 
 module.exports = {
     contactValidation,
