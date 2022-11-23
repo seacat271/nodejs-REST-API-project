@@ -5,22 +5,26 @@ const { tokenVerify } = require('../helpers/tokenHelper');
 
 const authMiddleware = async (req, res, next) => {
     try {
-        const [tokenType, token] = req.headers["authorization"].split(" ");
+        const [tokenType, token] = req.headers.authorization.split(" ");
+        console.log(typeof tokenType)
         const user = tokenVerify(token);
         if(!user) {
-            next(new NotAuthorizedError("Not authorized 1"))
+            next(new NotAuthorizedError("Not authorized"))
+        }
+        if(tokenType !== "Bearer") {
+            next(new NotAuthorizedError("Not authorized"))
         }
         const userById = await User.findById(user._id)
         if (!userById) {
-            next(new NotAuthorizedError("Not authorized 2"))
+            next(new NotAuthorizedError("Not authorized"))
         }
         if (userById.token !==  token) {
-            next(new NotAuthorizedError("Not authorized 3"))
+            next(new NotAuthorizedError("Not authorized"))
         }
         req.user = user;
 
     } catch (error) {
-        next(new NotAuthorizedError("Not authorized 4"))
+        next(new NotAuthorizedError("Not authorized"))
     }
     next()
 }

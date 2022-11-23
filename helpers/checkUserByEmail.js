@@ -11,7 +11,7 @@ switch (errorMessage) {
         if (!user) throw new NotAuthorizedError(errorMessage)
         return user
     default:
-        return;
+        return user;
 }
       }
 module.exports ={

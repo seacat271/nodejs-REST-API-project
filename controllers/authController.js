@@ -2,12 +2,12 @@ const { register, login, logout, currentUser, changeUSubscription } = require(".
 
 const registerController = async (req, res) => {
     const { email, password } = req.body;
-    user = await register(email, password);
+    const user = await register(email, password);
     res.status(201).json(user);
 };
 const loginController = async (req, res) => {
     const { email, password } = req.body;
-    user = await login(email, password);
+    const user = await login(email, password);
     res.json(user);
 };
 const logoutController = async (req, res) => {

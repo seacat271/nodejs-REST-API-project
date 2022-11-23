@@ -6,8 +6,9 @@ const modifyPassword = async (password) => {
 }
 
 const checkPassword = async (loginPass, truePass) => {
-    if (await bcrypt.compare(loginPass, truePass)) return
-    else throw new NotAuthorizedError("Email or password is wrong");
+    if (await bcrypt.compare(loginPass, truePass)) { 
+         return true
+    } else throw new NotAuthorizedError("Email or password is wrong");
 }
 
 module.exports = {

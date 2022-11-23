@@ -20,7 +20,6 @@ const login = async (email, password) => {
 
 const logout = async (userId) => {
   await User.findByIdAndUpdate(userId, { $set: { token: null} })
-  return
 };
 
 const currentUser = async (userId) => {
