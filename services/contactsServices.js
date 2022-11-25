@@ -1,44 +1,54 @@
-const {Contact} = require('../db/postModel');
-const { checkByID } = require('../helpers/checkByID');
+const { Contact } = require("../db/contactModel");
+const { checkContact } = require("../helpers/checkContact");
 
-const getContacts = async () => {
-    const contacts = await Contact.find({})
-    return contacts
+
+const getContacts = async (owner, {page, limit, favorite}) => {
+    const skip = (page - 1)*limit;
+    const contacts = await Contact.find({ owner }).select({__v: 0}).skip(skip).limit(parseInt(limit));
+    if (favorite) return contacts.filter(contact => contact.favorite.toString() === favorite);
+    return contacts;
 };
 
-const getContactById = async (id) => {
-    await checkByID(Contact, id);
-    const contactByID = await Contact.findById(id)
-    return contactByID;
+const getContactById = async (id, owner) => {
+    const contactByID = await checkContact(id, owner);
+  return contactByID;
 };
 
-const addContact = async ({phone, email, name, favorite}) => {
-    const newContact = new Contact({phone, email, name, favorite});
-    await newContact.save();
-    return newContact;
+const addContact = async ({ phone, email, name, favorite, owner }) => {
+  const newContact = new Contact({ phone, email, name, favorite, owner });
+  await newContact.save();
+  return newContact;
 };
 
-const changeContactById = async (id, { phone, email, name }) => {
-    await checkByID(Contact, id);
-    const updateContact = await Contact.findByIdAndUpdate(id, { $set: { phone, email, name } }, {returnDocument: 'after'});
-    return updateContact;
+const changeContactById = async (id, { phone, email, name}, owner ) => {
+  await checkContact(id, owner)
+  const updateContact = await Contact.findByIdAndUpdate(
+    id,
+    { $set: { phone, email, name } },
+    { returnDocument: "after" }
+  ).select({__v: 0});
+  return updateContact;
 };
-const deleteContactById = async (id) => {
-    await checkByID(Contact, id);
-    await Contact.findByIdAndDelete(id);
+const deleteContactById = async (id, owner) => {
+  await checkContact(id, owner)
+  await Contact.findByIdAndDelete(id);
 };
 
-const updateStatusContact = async (id, {favorite}) => {
-    await checkByID(Contact, id);
-    const updateContact = await Contact.findByIdAndUpdate(id, {$set: {favorite}}, {returnDocument: 'after'});
-    return updateContact;
-}
+const updateStatusContact = async (id, { favorite }, owner) => {
+  await checkContact(id, owner)
+  const updateContact = await Contact.findByIdAndUpdate(
+    id,
+    { $set: { favorite } },
+    { returnDocument: "after" }
+  ).select({__v: 0});
+  return updateContact;
+};
 
 module.exports = {
-    getContacts,
-    getContactById,
-    addContact,
-    changeContactById,
-    deleteContactById,
-    updateStatusContact,
-}
+  getContacts,
+  getContactById,
+  addContact,
+  changeContactById,
+  deleteContactById,
+  updateStatusContact,
+};
