@@ -10,7 +10,6 @@ const checkContact = async(id, owner) => {
     if(!contactByID) {
         throw new NoValidIdError("Not found")
     }
-    console.log(contactByID)
     if (contactByID.owner.toString() !== owner) {
         throw new NoValidIdError("Not valid ID")
       }
