@@ -1,17 +1,15 @@
 const express = require("express");
-// const uploadMiddleware = require('../../middlewares/multerMiddleware')
 const {
   } = require("../../middlewares/validation");
 
 const {
     uploadController,
-    downloadController,
 } = require("../../controllers/filesController");
 
 const { asyncWrapper } = require("../../helpers/asyncWrapper");
-
 const multer = require('multer');
 const path = require('path');
+
 const DIR_FILE = path.resolve('./public/avatar')
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
