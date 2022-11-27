@@ -20,6 +20,7 @@ const contactSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
     },
+    avatarURL: String,
   });
 
   const Contact = mongoose.model('contacts', contactSchema);

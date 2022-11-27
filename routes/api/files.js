@@ -10,7 +10,7 @@ const { asyncWrapper } = require("../../helpers/asyncWrapper");
 const multer = require('multer');
 const path = require('path');
 
-const DIR_FILE = path.resolve('./public/avatar')
+const DIR_FILE = path.resolve('./public/avatars')
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, DIR_FILE)

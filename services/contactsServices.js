@@ -1,5 +1,6 @@
 const { Contact } = require("../db/contactModel");
 const { checkContact } = require("../helpers/checkContact");
+const gravatar = require('gravatar')
 
 
 const getContacts = async (owner, {page, limit, favorite}) => {
@@ -15,8 +16,10 @@ const getContactById = async (id, owner) => {
 };
 
 const addContact = async ({ phone, email, name, favorite, owner }) => {
-  const newContact = new Contact({ phone, email, name, favorite, owner });
+  const avatarURL = gravatar.url(email);
+  const newContact = new Contact({ phone, email, name, favorite, owner, avatarURL});
   await newContact.save();
+
   return newContact;
 };
 
