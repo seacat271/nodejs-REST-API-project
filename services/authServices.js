@@ -3,7 +3,7 @@ const { checkPassword } = require("../helpers/cryptPassword");
 const { tokenCreate } = require("../helpers/tokenHelper");
 const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
 const { pathCombine } = require("../helpers/pathHelper");
-const { pictureHandler } = require("../helpers/picturehandler");
+const { pictureHandler, deleteOldOldAvatar } = require("../helpers/picturehandler");
 const gravatar = require('gravatar');
 
 const register = async (email, password) => {
@@ -45,6 +45,8 @@ const avatarUpload = async (file, userId) => {
 const {path: oldPath,  originalname} = file;
 const [newPath, avatarURL] = pathCombine(originalname)
 pictureHandler(oldPath, newPath);
+const userById = await User.findById(userId)
+deleteOldOldAvatar(userById)
 const updateUser = await User.findByIdAndUpdate(
   userId,
   { $set: { avatarURL } },

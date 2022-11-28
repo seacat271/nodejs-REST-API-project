@@ -1,4 +1,14 @@
 const Jimp = require('jimp');
+const fs = require('fs/promises');
+
+const deleteOldOldAvatar = async (userById) => {
+    if(!userById.avatarURL) return
+    if(userById.avatarURL.slice(0, 18) === "//www.gravatar.com") return
+    const newPath = "public" + userById.avatarURL.slice(24)
+    await fs.unlink(`${newPath}`, (err) => {
+        if (err) throw err;
+      });
+};
 
 const pictureHandler = (oldPath, newPath) => {
     Jimp.read(oldPath)
@@ -10,8 +20,14 @@ const pictureHandler = (oldPath, newPath) => {
     .catch(err => {
      console.log(err)
     });
+
+    fs.unlink(`${oldPath}`, (err) => {
+        if (err) throw err;
+      });
+
 }
 
 module.exports = {
     pictureHandler,
+    deleteOldOldAvatar,
 }
