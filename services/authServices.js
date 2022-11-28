@@ -4,10 +4,12 @@ const { tokenCreate } = require("../helpers/tokenHelper");
 const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
 const { pathCombine } = require("../helpers/pathHelper");
 const { pictureHandler } = require("../helpers/picturehandler");
+const gravatar = require('gravatar');
 
 const register = async (email, password) => {
   await findCheckUserByEmail(email, "Email in use")
-  const user = new User({ email, password });
+  const avatarURL = gravatar.url(email);
+  const user = new User({ email, password, avatarURL });
   const newUser = await user.save();
   return { user: { email: newUser.email, subscription: newUser.subscription } };
 };
