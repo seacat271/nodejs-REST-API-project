@@ -30,9 +30,9 @@ const subscriptionController = async (req, res) => {
 
 const avatarUploadController = async (req, res) => {
   const {_id: userId} = req.user;
-  const {file} = req;
-  const avatarURL = await avatarUpload(file, userId)
-  res.json(avatarURL)
+  const {path: avatarURL} = req.file;
+  const avatarUser = await avatarUpload(avatarURL, userId)
+  res.json(avatarUser)
 }
 
 module.exports = {

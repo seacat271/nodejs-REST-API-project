@@ -18,6 +18,7 @@ const { authMiddleware } = require("../../middlewares/authMiddleware");
 
 const multer = require('multer');
 const path = require('path');
+const { imageHandler } = require("../../middlewares/imageHandler");
 
 const DIR_FILE = path.resolve('./tmp') 
 const storage = multer.diskStorage({
@@ -46,6 +47,6 @@ router.get("/current", authMiddleware, asyncWrapper(currentUserController));
 
 router.patch("/", authMiddleware, subscriptionValidation, asyncWrapper(subscriptionController))
 
-router.patch("/avatars", authMiddleware, uploadMiddleware.single("avatar"), asyncWrapper(avatarUploadController))
+router.patch("/avatars", authMiddleware, uploadMiddleware.single("avatar"), imageHandler, asyncWrapper(avatarUploadController))
 
 module.exports = router;

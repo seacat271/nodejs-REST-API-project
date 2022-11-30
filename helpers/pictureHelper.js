@@ -10,7 +10,7 @@ const deleteOldOldAvatar = async (userById) => {
       });
 };
 
-const pictureHandler = (oldPath, newPath) => {
+const pictureConverter = (oldPath, newPath) => {
     Jimp.read(oldPath)
     .then(avatar => {
         return avatar
@@ -28,6 +28,6 @@ const pictureHandler = (oldPath, newPath) => {
 }
 
 module.exports = {
-    pictureHandler,
+    pictureConverter,
     deleteOldOldAvatar,
 }

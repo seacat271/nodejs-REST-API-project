@@ -2,8 +2,7 @@ const { User } = require("../db/userModel");
 const { checkPassword } = require("../helpers/cryptPassword");
 const { tokenCreate } = require("../helpers/tokenHelper");
 const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
-const { pathCombine } = require("../helpers/pathHelper");
-const { pictureHandler, deleteOldOldAvatar } = require("../helpers/picturehandler");
+const { deleteOldOldAvatar } = require("../helpers/pictureHelper");
 const gravatar = require('gravatar');
 
 const register = async (email, password) => {
@@ -41,10 +40,8 @@ const changeUSubscription = async (userId, {subscription}) => {
   return {token, user: { email: updateUser.email, subscription: updateUser.subscription }};
 }
 
-const avatarUpload = async (file, userId) => {
-const {path: oldPath,  originalname} = file;
-const [newPath, avatarURL] = pathCombine(originalname)
-pictureHandler(oldPath, newPath);
+const avatarUpload = async (avatarURL, userId) => {
+
 const userById = await User.findById(userId)
 deleteOldOldAvatar(userById)
 const updateUser = await User.findByIdAndUpdate(
@@ -54,7 +51,6 @@ const updateUser = await User.findByIdAndUpdate(
 ).select({avatarURL: 1, _id:0});
 return updateUser
 }
-
 
 
 
