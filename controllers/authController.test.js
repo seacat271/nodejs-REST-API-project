@@ -1,8 +1,8 @@
-const {loginController} =require('../controllers/authController');
+const {loginController} =require('./authController');
 const {login} = require('../services/authServices')
 
-describe("Test loginController", ()=>{
-    test("Test status-code response", () => {
+describe("Test loginController", () => {
+    it("Test response status-code 200", async () => {
         const mockReq = {body: {email: "test@test.com", password: "test"}}
         const mockRes = {};
         const mockUser = {
@@ -12,14 +12,22 @@ describe("Test loginController", ()=>{
                 "subscription": "pro"
             }
         }      
-        // jest.spyOn(login,  ).mockImplementationOnce(async ()=> mockUser)
-        // const result = loginController(mockReq, mockRes)
-        expect(loginController(mockReq, mockRes)).toEqual(res.status === 200)
+        const login = jest.fn(async ()=> mockUser)
+        // loginController(mockReq, mockRes)
+        expect(await loginController(mockReq, mockRes)).toEqual(mockRes.status === 200)
         // expect(result.body.token).toBe()
         // expect(result.body.user).toEqual({
         //     "email": "test@test.com",
         //     "subscription": "pro"
         // })
         // done()
+    })
+
+    it("Test response should have token", async () => {
+
+    })
+
+    it("Test response should have user Object", async () => {
+
     })
 })
