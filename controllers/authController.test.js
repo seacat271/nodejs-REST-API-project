@@ -12,9 +12,10 @@ describe("Test loginController", () => {
                 "subscription": "pro"
             }
         }      
-        const login = jest.fn(async ()=> mockUser)
+        jest.mock("login").mockResolvedValue(mockUser)
         // loginController(mockReq, mockRes)
-        expect(await loginController(mockReq, mockRes)).toEqual(mockRes.status === 200)
+        mockReq = await loginController(mockReq, mockRes);
+        expect(result).toEqual(mockRes.status === 200)
         // expect(result.body.token).toBe()
         // expect(result.body.user).toEqual({
         //     "email": "test@test.com",
