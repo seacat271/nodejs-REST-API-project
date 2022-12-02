@@ -9,7 +9,6 @@ const {
 
 const getContactsController = async (req, res) => {
   let {page = 1, limit = 20, favorite} = req.query;
-  console.log(favorite)
   limit = parseInt(limit) > 20 ? 20 : limit;
   const {_id: owner} = req.user;
   const contacts = await getContacts(owner, {page, limit, favorite});

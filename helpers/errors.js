@@ -31,6 +31,8 @@ class ConflictEmailError extends CustomError {
         super (message);
         this.status = 409;
     }
+
+    
 }
 
 module.exports = {

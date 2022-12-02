@@ -6,7 +6,6 @@ const { tokenVerify } = require('../helpers/tokenHelper');
 const authMiddleware = async (req, res, next) => {
     try {
         const [tokenType, token] = req.headers.authorization.split(" ");
-        console.log(typeof tokenType)
         const user = tokenVerify(token);
         if(!user) {
             next(new NotAuthorizedError("Not authorized"))

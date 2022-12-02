@@ -2,11 +2,23 @@ const { Contact } = require("../db/contactModel");
 const { checkContact } = require("../helpers/checkContact");
 
 
+
 const getContacts = async (owner, {page, limit, favorite}) => {
     const skip = (page - 1)*limit;
     const contacts = await Contact.find({ owner }).select({__v: 0}).skip(skip).limit(parseInt(limit));
     if (favorite) return contacts.filter(contact => contact.favorite.toString() === favorite);
     return contacts;
+
+    // const listContacts = async (req, res) => {
+    //   const { _id: owner } = req.user;
+    //   const { page = 1, limit = 20, favorite } = req.query;
+    //   const skip = (page - 1) * limit;
+    
+    //   const listOfContacts = await Contact.find(
+    //     favorite ? {owner, favorite} : {owner},
+    //     "-createdAt -updatedAt",
+    //     { skip, limit }
+    //   ).populate("owner", "email subscription");
 };
 
 const getContactById = async (id, owner) => {
@@ -15,8 +27,10 @@ const getContactById = async (id, owner) => {
 };
 
 const addContact = async ({ phone, email, name, favorite, owner }) => {
-  const newContact = new Contact({ phone, email, name, favorite, owner });
+
+  const newContact = new Contact({ phone, email, name, favorite, owner});
   await newContact.save();
+
   return newContact;
 };
 

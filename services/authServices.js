@@ -2,10 +2,13 @@ const { User } = require("../db/userModel");
 const { checkPassword } = require("../helpers/cryptPassword");
 const { tokenCreate } = require("../helpers/tokenHelper");
 const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
+const { deleteOldOldAvatar } = require("../helpers/pictureHelper");
+const gravatar = require('gravatar');
 
 const register = async (email, password) => {
   await findCheckUserByEmail(email, "Email in use")
-  const user = new User({ email, password });
+  const avatarURL = gravatar.url(email);
+  const user = new User({ email, password, avatarURL });
   const newUser = await user.save();
   return { user: { email: newUser.email, subscription: newUser.subscription } };
 };
@@ -37,10 +40,25 @@ const changeUSubscription = async (userId, {subscription}) => {
   return {token, user: { email: updateUser.email, subscription: updateUser.subscription }};
 }
 
+const avatarUpload = async (avatarURL, userId) => {
+
+const userById = await User.findById(userId)
+deleteOldOldAvatar(userById)
+const updateUser = await User.findByIdAndUpdate(
+  userId,
+  { $set: { avatarURL } },
+  { returnDocument: "after" }
+).select({avatarURL: 1, _id:0});
+return updateUser
+}
+
+
+
 module.exports = {
   register,
   login,
   logout,
   currentUser,
   changeUSubscription,
+  avatarUpload,
 };
