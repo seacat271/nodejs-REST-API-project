@@ -4,6 +4,7 @@ const { tokenCreate } = require("../helpers/tokenHelper");
 const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
 const { deleteOldOldAvatar } = require("../helpers/pictureHelper");
 const gravatar = require('gravatar');
+const { NoValidIdError } = require("../helpers/errors");
 
 const register = async (email, password) => {
   await findCheckUserByEmail(email, "Email in use")
@@ -52,6 +53,15 @@ const updateUser = await User.findByIdAndUpdate(
 return updateUser
 }
 
+const verification = async (verificationToken) => {
+  const user = await User.findOne({verificationToken});
+  if (!user) throw new NoValidIdError('User not found')
+  user.verificationToken  = null;
+  user.verify  = true;
+  await user.save();
+  return {message: 'Verification successful'}
+}
+
 
 
 module.exports = {
@@ -61,4 +71,5 @@ module.exports = {
   currentUser,
   changeUSubscription,
   avatarUpload,
+  verification,
 };

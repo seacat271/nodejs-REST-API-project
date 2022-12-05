@@ -1,4 +1,4 @@
-const { register, login, logout, currentUser, changeUSubscription, avatarUpload } = require("../services/authServices");
+const { register, login, logout, currentUser, changeUSubscription, avatarUpload, verification } = require("../services/authServices");
 
 const registerController = async (req, res) => {
     const { email, password } = req.body;
@@ -35,6 +35,12 @@ const avatarUploadController = async (req, res) => {
   res.json(avatarUser)
 }
 
+const verificationController = async (req, res) => {
+  const {verificationToken} = req.params;
+  const result = verification(verificationToken)
+  res.json(result)
+}
+
 module.exports = {
   registerController,
   loginController,
@@ -42,4 +48,5 @@ module.exports = {
   currentUserController,
   subscriptionController,
   avatarUploadController,
+  verificationController,
 };

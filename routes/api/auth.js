@@ -11,6 +11,7 @@ const {
     currentUserController,
     subscriptionController,
     avatarUploadController,
+    verificationController,
 } = require("../../controllers/authController");
 
 const { asyncWrapper } = require("../../helpers/asyncWrapper");
@@ -37,16 +38,20 @@ const uploadMiddleware = multer({storage})
 
 const router = express.Router();
 
+router.get("/current", authMiddleware, asyncWrapper(currentUserController));
+
+router.get('/verify/:verificationToken', asyncWrapper(verificationController))
+
 router.post("/register", authValidation, asyncWrapper(registerController));
 
 router.post("/login", authValidation, asyncWrapper(loginController));
 
 router.post("/logout", authMiddleware, asyncWrapper(logoutController));
 
-router.get("/current", authMiddleware, asyncWrapper(currentUserController));
-
 router.patch("/", authMiddleware, subscriptionValidation, asyncWrapper(subscriptionController))
 
 router.patch("/avatars", authMiddleware, uploadMiddleware.single("avatar"), imageHandler, asyncWrapper(avatarUploadController))
+
+
 
 module.exports = router;
