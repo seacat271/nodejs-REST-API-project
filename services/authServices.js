@@ -4,7 +4,7 @@ const { tokenCreate } = require("../helpers/tokenHelper");
 const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
 const { deleteOldOldAvatar } = require("../helpers/pictureHelper");
 const gravatar = require('gravatar');
-const { NoValidIdError } = require("../helpers/errors");
+const { NoValidIdError, NotVerifiedError } = require("../helpers/errors");
 const { v4: uuidv4 } = require('uuid');
 const { mailMaker } = require("../helpers/mailHelper");
 
@@ -21,6 +21,7 @@ const register = async (email, password) => {
 
 const login = async (email, password) => {
   const user = await findCheckUserByEmail(email, "Email or password is wrong");
+  if (!user.verify) {throw new NotVerifiedError("You must confirm your e-mail")}
   await checkPassword(password, user.password)
   const token = tokenCreate({_id: user._id, subscription: user.subscription});
   const updateUser = await User.findByIdAndUpdate(user._id, { $set: { token }}, { returnDocument: "after" });
@@ -59,12 +60,14 @@ return updateUser
 }
 
 const verification = async (verificationToken) => {
+
   const user = await User.findOne({verificationToken});
+  console.log(user)
   if (!user) throw new NoValidIdError('User not found')
-  user.verificationToken  = null;
+  user.verificationToken = null;
   user.verify  = true;
   await user.save();
-  return {message: 'Verification successful'}
+  // return {message: 'Verification successful'}
 }
 
 

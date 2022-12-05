@@ -37,8 +37,13 @@ const avatarUploadController = async (req, res) => {
 
 const verificationController = async (req, res) => {
   const {verificationToken} = req.params;
-  const result = verification(verificationToken)
-  res.json(result)
+  const result = await verification(verificationToken)
+  console.log(result)
+  res.json()
+}
+
+const repeatedlyVerificationController = async (req, res) => {
+  
 }
 
 module.exports = {
@@ -49,4 +54,5 @@ module.exports = {
   subscriptionController,
   avatarUploadController,
   verificationController,
+  repeatedlyVerificationController,
 };

@@ -21,10 +21,10 @@ const userSchema = new mongoose.Schema({
     verify: {
       type: Boolean,
       default: false,
+      required: [true, 'Verify token is required']
     },
     verificationToken: {
       type: String,
-      required: [true, 'Verify token is required'],
     },
   })
 

@@ -12,6 +12,7 @@ const {
     subscriptionController,
     avatarUploadController,
     verificationController,
+    repeatedlyVerificationController,
 } = require("../../controllers/authController");
 
 const { asyncWrapper } = require("../../helpers/asyncWrapper");
@@ -40,7 +41,9 @@ const router = express.Router();
 
 router.get("/current", authMiddleware, asyncWrapper(currentUserController));
 
-router.get('/verify/:verificationToken', asyncWrapper(verificationController))
+router.get('/verify/:verificationToken', asyncWrapper(verificationController));
+
+router.post('/verify', asyncWrapper(repeatedlyVerificationController))
 
 router.post("/register", authValidation, asyncWrapper(registerController));
 
