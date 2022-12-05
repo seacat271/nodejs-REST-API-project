@@ -5,12 +5,17 @@ const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
 const { deleteOldOldAvatar } = require("../helpers/pictureHelper");
 const gravatar = require('gravatar');
 const { NoValidIdError } = require("../helpers/errors");
+const { v4: uuidv4 } = require('uuid');
+const { mailMaker } = require("../helpers/mailHelper");
 
 const register = async (email, password) => {
   await findCheckUserByEmail(email, "Email in use")
   const avatarURL = gravatar.url(email);
-  const user = new User({ email, password, avatarURL });
+  const verificationToken = uuidv4();
+  const user = new User({ email, password, avatarURL, verificationToken});
+  await mailMaker(email, verificationToken)
   const newUser = await user.save();
+
   return { user: { email: newUser.email, subscription: newUser.subscription } };
 };
 
