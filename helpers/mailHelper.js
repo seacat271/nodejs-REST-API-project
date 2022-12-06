@@ -1,4 +1,5 @@
 const sgMail = require('@sendgrid/mail');
+const { v4: uuidv4 } = require('uuid');
 // const config = {
 //     host: "smtp.gmail.com",
 //     port: 465,
@@ -8,8 +9,9 @@ const sgMail = require('@sendgrid/mail');
 //         pass: process.env.PASSWORD,
 //     }
 // }
-const mailMaker = async (email, verificationToken ) => {
+const mailMaker = async (email) => {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const verificationToken = uuidv4();
     const msg = {
         to: email,
         from: 'kirill.art3m3nko@gmail.com',
@@ -18,6 +20,7 @@ const mailMaker = async (email, verificationToken ) => {
         html: `<strong>To confirm your e-mail address please follow this link:  http://localhost:3030/api/users/verify/${verificationToken}</strong>`,
     }
     await sgMail.send(msg)
+    return verificationToken;
 }
 
 module.exports = {

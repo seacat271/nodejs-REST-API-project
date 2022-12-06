@@ -1,4 +1,4 @@
-const { register, login, logout, currentUser, changeUSubscription, avatarUpload, verification } = require("../services/authServices");
+const { register, login, logout, currentUser, changeUSubscription, avatarUpload, verification, resendingVerification } = require("../services/authServices");
 
 const registerController = async (req, res) => {
     const { email, password } = req.body;
@@ -38,12 +38,13 @@ const avatarUploadController = async (req, res) => {
 const verificationController = async (req, res) => {
   const {verificationToken} = req.params;
   const result = await verification(verificationToken)
-  console.log(result)
-  res.json()
+  res.json(result)
 }
 
-const repeatedlyVerificationController = async (req, res) => {
-  
+const resendingVerificationController = async (req, res) => {
+const {email} = req.body;
+const result = await resendingVerification(email)
+res.json(result)
 }
 
 module.exports = {
@@ -54,5 +55,5 @@ module.exports = {
   subscriptionController,
   avatarUploadController,
   verificationController,
-  repeatedlyVerificationController,
+  resendingVerificationController,
 };

@@ -5,15 +5,15 @@ const { findCheckUserByEmail } = require("../helpers/checkUserByEmail");
 const { deleteOldOldAvatar } = require("../helpers/pictureHelper");
 const gravatar = require('gravatar');
 const { NoValidIdError, NotVerifiedError } = require("../helpers/errors");
-const { v4: uuidv4 } = require('uuid');
+
 const { mailMaker } = require("../helpers/mailHelper");
 
 const register = async (email, password) => {
   await findCheckUserByEmail(email, "Email in use")
   const avatarURL = gravatar.url(email);
-  const verificationToken = uuidv4();
+  const verificationToken = await mailMaker(email)
   const user = new User({ email, password, avatarURL, verificationToken});
-  await mailMaker(email, verificationToken)
+
   const newUser = await user.save();
 
   return { user: { email: newUser.email, subscription: newUser.subscription } };
@@ -60,16 +60,23 @@ return updateUser
 }
 
 const verification = async (verificationToken) => {
-
   const user = await User.findOne({verificationToken});
-  console.log(user)
   if (!user) throw new NoValidIdError('User not found')
   user.verificationToken = null;
   user.verify  = true;
   await user.save();
-  // return {message: 'Verification successful'}
+  return {message: 'Verification successful'}
 }
 
+const resendingVerification = async(email) => {
+  const user = await findCheckUserByEmail(email, "Verification has already been passed");
+  const verificationToken = await mailMaker(email)
+  user.verificationToken = verificationToken;
+  await user.save();
+  return {
+    message: "Verification email sent"
+  }
+}
 
 
 module.exports = {
@@ -80,4 +87,5 @@ module.exports = {
   changeUSubscription,
   avatarUpload,
   verification,
+  resendingVerification,
 };

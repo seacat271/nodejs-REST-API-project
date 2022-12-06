@@ -2,6 +2,7 @@ const express = require("express");
 const {
     authValidation,
     subscriptionValidation,
+    resendingValidation,
   } = require("../../middlewares/validation");
 
 const {
@@ -12,7 +13,7 @@ const {
     subscriptionController,
     avatarUploadController,
     verificationController,
-    repeatedlyVerificationController,
+    resendingVerificationController,
 } = require("../../controllers/authController");
 
 const { asyncWrapper } = require("../../helpers/asyncWrapper");
@@ -43,7 +44,7 @@ router.get("/current", authMiddleware, asyncWrapper(currentUserController));
 
 router.get('/verify/:verificationToken', asyncWrapper(verificationController));
 
-router.post('/verify', asyncWrapper(repeatedlyVerificationController))
+router.post('/verify', resendingValidation, asyncWrapper(resendingVerificationController))
 
 router.post("/register", authValidation, asyncWrapper(registerController));
 
