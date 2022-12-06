@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 //     port: 465,
 //     secure: true,
 //     auth: {
-//         user: 'kirill.art3m3nko@gmail.com',
+//         user: process.env.MASTER_EMAIL,,
 //         pass: process.env.PASSWORD,
 //     }
 // }
@@ -14,7 +14,7 @@ const mailMaker = async (email) => {
     const verificationToken = uuidv4();
     const msg = {
         to: email,
-        from: 'kirill.art3m3nko@gmail.com',
+        from: process.env.MASTER_EMAIL,
         subject: 'Confirm e-mail address',
         text: `To confirm your e-mail address please follow this link: http://localhost:3030/api/users/verify/${verificationToken}`,
         html: `<strong>To confirm your e-mail address please follow this link:  http://localhost:3030/api/users/verify/${verificationToken}</strong>`,
