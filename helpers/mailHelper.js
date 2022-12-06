@@ -16,8 +16,8 @@ const mailMaker = async (email) => {
         to: email,
         from: process.env.MASTER_EMAIL,
         subject: 'Confirm e-mail address',
-        text: `To confirm your e-mail address please follow this link: http://localhost:3030/api/users/verify/${verificationToken}`,
-        html: `<strong>To confirm your e-mail address please follow this link:  http://localhost:3030/api/users/verify/${verificationToken}</strong>`,
+        text: `To confirm your e-mail address please follow this link: ${process.env.CONFIRM_PATH}${verificationToken}`,
+        html: `<strong>To confirm your e-mail address please follow this link:  <a href="${process.env.CONFIRM_PATH}${verificationToken}">Confirm</a></strong>`,
     }
     await sgMail.send(msg)
     return verificationToken;

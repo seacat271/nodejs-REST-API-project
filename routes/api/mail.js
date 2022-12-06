@@ -20,7 +20,7 @@ const router = express.Router();
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         const msg = {
           to: req.body.email,
-          from: process.env.MASTER_EMAIL,,
+          from: process.env.MASTER_EMAIL,
           subject: 'test test',
           text: req.body.text,
         //   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
