@@ -20,7 +20,9 @@ const schemaRegister = Joi.object({
 const schemaSubscription = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required()
 });
-
+ const schemaResendingVerification = Joi.object({
+    email: Joi.string().trim(true).email().required(),
+ })
 
 const contactValidation = (req, res, next) => {
     const validationResult = schemaContact.validate(req.body);
@@ -57,10 +59,18 @@ const authValidation = (req, res, next) => {
   next();
 }
 
+const resendingValidation = (req, res, next) => {
+  const validationResult = schemaResendingVerification.validate(req.body);
+  if (validationResult.error) {
+    next(new ValidationError("missing required field email"))
+  }
+  next();
+}
+
 module.exports = {
     contactValidation,
     patchStatusValidation,
     authValidation,
     subscriptionValidation,
-  
+    resendingValidation,
   }
