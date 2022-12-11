@@ -38,7 +38,9 @@ const avatarUploadController = async (req, res) => {
 const verificationController = async (req, res) => {
   const {verificationToken} = req.params;
   const result = await verification(verificationToken)
-  res.json(result)
+  // res.json(result)
+  
+  res.render("confirm")
 }
 
 const resendingVerificationController = async (req, res) => {

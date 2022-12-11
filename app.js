@@ -19,8 +19,8 @@ app.set('view engine', 'ejs');
 app.use('/api/contacts', contactsRouter)
 app.use('/api/users', authRouter)
 app.use('/', mailRouter)
+// app.use('/api/avatars', express.static(downloadPath));
 app.use('/api/avatars', express.static(downloadPath));
-
 
 
 
